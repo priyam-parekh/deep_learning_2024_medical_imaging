@@ -3,27 +3,43 @@ from tensorflow.keras.applications import ResNet50
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Dropout, BatchNormalization
 
-def build_model(input_shape=(224, 224, 3)):
-    base_model = ResNet50(weights='imagenet', include_top=False, input_shape=input_shape)
 
-    for layer in base_model.layers:
-        layer.trainable = False
+class TumorClassifierModel(tf.keras.Model):
+    def __init__(self,**kwargs):
+        super(TumorClassifierModel,self).__init__(**kwargs)
+        self.added_layers = tf.keras.Sequential([
+            tf.keras.layers.Dense(420),
+            tf.keras.layers.LeakyReLU(),
+            tf.keras.layers.Dense(220),
+            tf.keras.layers.LeakyReLU(),
+            tf.keras.layers.Dense(40),
+            tf.keras.layers.LeakyReLU(),
+            tf.keras.layers.Dense(1,activation='sigmoid')
+        ])
+    def call(self,inputs):
+        return self.added_layers(inputs)
+    
+# def build_model(input_shape=(224, 224, 3)):
+#     base_model = ResNet50(weights='imagenet', include_top=False, input_shape=input_shape)
 
-    x = base_model.output
-    x = GlobalAveragePooling2D()(x)  
-    x = BatchNormalization()(x)      
-    x = Dropout(0.5)(x)              
-    x = Dense(1024, activation='relu')(x)  
-    x = BatchNormalization()(x)     
-    x = Dropout(0.5)(x)              
+#     for layer in base_model.layers:
+#         layer.trainable = False
 
-    predictions = Dense(1, activation='sigmoid')(x)
+#     x = base_model.output
+#     x = GlobalAveragePooling2D()(x)  
+#     x = BatchNormalization()(x)      
+#     x = Dropout(0.5)(x)              
+#     x = Dense(1024, activation='relu')(x)  
+#     x = BatchNormalization()(x)     
+#     x = Dropout(0.5)(x)              
 
-    model = Model(inputs=base_model.input, outputs=predictions)
+#     predictions = Dense(1, activation='sigmoid')(x)
 
-    return model
+#     model = Model(inputs=base_model.input, outputs=predictions)
 
-if __name__ == '__main__':
-    model = build_model()
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-    model.summary()
+#     return model
+
+# if __name__ == '__main__':
+#     model = build_model()
+#     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+#     model.summary()

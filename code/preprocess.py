@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 import pickle
 from tqdm import tqdm
 from PIL import Image
+
 def extract_features(names,data_folder):
     '''
     Method used to extract the features from the images in the dataset using ResNet50
@@ -25,7 +26,8 @@ def extract_features(names,data_folder):
         img_in = np.concatenate((img_in,img_in,img_in),axis=-1)
         image_features += [gap(resnet(img_in))]
     print()
-    return np.array(image_features)
+    return np.array(image_features) # returns an np array of number of images by features extracted.
+
 def load_and_process_images(directory, target_size=(224, 224)):
     """
     Load images from the directory, resize them, and normalize the pixel values.
