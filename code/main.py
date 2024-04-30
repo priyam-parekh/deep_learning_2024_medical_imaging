@@ -7,20 +7,16 @@ from model import TumorClassifierModel
 
 def parseArguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--batch_size", type=int, default=12)
+    parser.add_argument("--batch_size", type=int, default=64)
     parser.add_argument("--data", default= "C:\dl\deep_learning_2024_medical_imaging\medical_data\data.p")
-    parser.add_argument("--num_epochs", type=int, default=10)
-    parser.add_argument("--learning_rate", type=float, default=1e-3)
+    parser.add_argument("--num_epochs", type=int, default=6)
+    parser.add_argument("--learning_rate", type=float, default=1e-4)
     args = parser.parse_args()
     return args
 def train(model,train_inputs,train_labels,args):
     model.compile(optimizer='adam',loss='binary_crossentropy',metrics=['accuracy'])
-    # Define a callback function to print accuracy after each batch
-    def print_batch_accuracy(epoch, logs):
-        print(f'Epoch {epoch + 1} Accuracy: {logs["accuracy"]:.4f}')
-    batch_accuracy_callback = tf.keras.callbacks.LambdaCallback(on_batch_end=print_batch_accuracy)
 
-    history = model.fit(train_inputs,train_labels,epochs=args.num_epochs,batch_size=args.batch_size,callbacks=[batch_accuracy_callback])
+    history = model.fit(train_inputs,train_labels,epochs=args.num_epochs,batch_size=args.batch_size)
     return history
 def test(model,test_inputs,test_labels):
     loss,accuracy = model.evaluate(test_inputs,test_labels)
@@ -39,5 +35,6 @@ def main(args):
     model =TumorClassifierModel()
     train(model,train_inputs=train_features,train_labels=train_labels,args=args)
     test(model,test_inputs=test_features,test_labels=test_labels)
+
 if __name__ == '__main__':
     main(parseArguments())

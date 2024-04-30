@@ -13,7 +13,6 @@ def extract_features(names,data_folder):
     '''
     image_features = []
     resnet = tf.keras.applications.ResNet50(False)  ## Produces Bx7x7x2048
-    gap = tf.keras.layers.GlobalAveragePooling2D()  ## Produces Bx2048
     pbar = tqdm(names)
     for i, image_name in enumerate(pbar):
         img_path = f'{data_folder}/{image_name}'
@@ -24,7 +23,7 @@ def extract_features(names,data_folder):
         img_in = tf.keras.applications.resnet50.preprocess_input(img_array)[np.newaxis, :]
         img_in = np.expand_dims(img_in,axis=-1)
         img_in = np.concatenate((img_in,img_in,img_in),axis=-1)
-        image_features += [gap(resnet(img_in))]
+        image_features += [resnet(img_in)]
     print()
     return np.array(image_features) # returns an np array of number of images by features extracted.
 
