@@ -1,4 +1,6 @@
 import argparse
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 import tensorflow as tf
 import pickle
 import numpy as np
@@ -7,8 +9,8 @@ from model import TumorClassifierModel
 def parseArguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("--batch_size", type=int, default=128)
-    parser.add_argument("--data", default= "C:\dl\deep_learning_2024_medical_imaging\medical_data\data.p")
-    parser.add_argument("--num_epochs", type=int, default=5)
+    parser.add_argument("--data", default= "/home/nykim/Desktop/cs147/deep_learning_2024_medical_imaging/medical_data/data.p")
+    parser.add_argument("--num_epochs", type=int, default=7)
     parser.add_argument("--learning_rate", type=float, default=1e-4)
     args = parser.parse_args()
     return args
