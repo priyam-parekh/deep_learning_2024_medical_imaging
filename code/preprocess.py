@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from sklearn.model_selection import train_test_split
 import pickle
 from tqdm import tqdm
@@ -12,8 +11,7 @@ def extract_features(names,data_folder):
     Method used to extract the features from the images in the dataset using ResNet50
     '''
     image_features = []
-    resnet = tf.keras.applications.ResNet50(False)  ## Produces Bx7x7x2048
-    gap = tf.keras.layers.GlobalAveragePooling2D()  ## Produces Bx2048
+    # resnet = tf.keras.applications.ResNet50(False)  ## Produces Bx7x7x2048
     pbar = tqdm(names)
     for i, image_name in enumerate(pbar):
         img_path = f'{data_folder}/{image_name}'
@@ -21,10 +19,11 @@ def extract_features(names,data_folder):
         with Image.open(img_path) as img:
             img = img.convert('L')
             img_array = np.array(img.resize((224,224)))
-        img_in = tf.keras.applications.resnet50.preprocess_input(img_array)[np.newaxis, :]
-        img_in = np.expand_dims(img_in,axis=-1)
-        img_in = np.concatenate((img_in,img_in,img_in),axis=-1)
-        image_features += [gap(resnet(img_in))]
+        # img_in = tf.keras.applications.resnet50.preprocess_input(img_array)[np.newaxis, :]
+        # img_in = np.expand_dims(img_in,axis=-1)
+        # img_in = np.concatenate((img_in,img_in,img_in),axis=-1)
+        image_features += [img_array]
+    print(np.array(image_features).shape)
     print()
     return np.array(image_features) # returns an np array of number of images by features extracted.
 
@@ -60,6 +59,7 @@ def load_and_process_images(directory, target_size=(224, 224)):
     # add all the images in no to the images and add the corresponding label.
     labels = np.array(labels)
     indexes = np.arange(len(image_features))
+    #shuffle the labels and image_features in the same way
     np.random.shuffle(indexes)
     image_features = image_features[indexes]
     labels = labels[indexes]
