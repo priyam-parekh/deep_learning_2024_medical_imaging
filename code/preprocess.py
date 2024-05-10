@@ -19,9 +19,7 @@ def extract_features(names,data_folder):
         with Image.open(img_path) as img:
             img = img.convert('L')
             img_array = np.array(img.resize((224,224)))
-        # img_in = tf.keras.applications.resnet50.preprocess_input(img_array)[np.newaxis, :]
-        # img_in = np.expand_dims(img_in,axis=-1)
-        # img_in = np.concatenate((img_in,img_in,img_in),axis=-1)
+            #just pass the image array right in. 
         image_features += [img_array]
     print(np.array(image_features).shape)
     print()
@@ -36,15 +34,6 @@ def load_and_process_images(directory, target_size=(224, 224)):
     """
     image_features = []
     labels = []
-    # for idx, label in enumerate(classes):
-    #     class_dir = os.path.join(directory, label)
-    #     for filename in os.listdir(class_dir):
-    #         img_path = os.path.join(class_dir, filename)
-    #         img = load_img(img_path, target_size=target_size)
-    #         img = img_to_array(img)
-    #         img = img / 255.0  
-    #         images.append(img)
-    #         labels.append(idx)
     no_directory = f'{directory}/no'
     no_image_names = os.listdir(no_directory)
     for __ in range(len(no_image_names)):

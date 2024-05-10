@@ -7,6 +7,10 @@ import numpy as np
 
 from model import TumorClassifierModel
 def parseArguments():
+    '''
+    The parse arguments function is used to create default values for some of the different
+    hyperparameters used in our model.
+    '''
     parser = argparse.ArgumentParser()
     parser.add_argument("--batch_size", type=int, default=128)
     parser.add_argument("--data", default= "/home/nykim/Desktop/cs147/deep_learning_2024_medical_imaging/medical_data/data.p")
@@ -15,6 +19,10 @@ def parseArguments():
     args = parser.parse_args()
     return args
 def train(model,train_inputs,train_labels,args):
+    '''
+    This function trains our entire model given the train_inputs and labels. We
+    use adam optimizer and binary_crosentropy as the loss.
+    '''
     indices = tf.random.shuffle(tf.range(train_inputs.shape[0]))
     train_inputs = tf.gather(train_inputs,indices)
     train_labels = tf.gather(train_labels,indices)
@@ -22,6 +30,9 @@ def train(model,train_inputs,train_labels,args):
     history = model.fit(train_inputs,train_labels,epochs=args.num_epochs,batch_size=args.batch_size,shuffle=True)
     return history
 def test(model,test_inputs,test_labels):
+    '''
+    The test function evaluates our model given the test_inputs and test_labels
+    '''
     loss,accuracy = model.evaluate(test_inputs,test_labels)
     print(f'Test Loss: {loss:.4f}')
     print(f'Test Accuracy: {accuracy:.4f}')
