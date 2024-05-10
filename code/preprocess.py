@@ -85,5 +85,5 @@ def create_pickle(data_folder):
     print(f'Data has been dumped into {data_folder}/data.p!')
 if __name__ == '__main__':
     # data_dir = '../medical_data' 
-    data_dir = "C:\dl\deep_learning_2024_medical_imaging\medical_data"
+    data_dir = "/home/nykim/Desktop/cs147/deep_learning_2024_medical_imaging/medical_data"
     create_pickle(data_dir)
